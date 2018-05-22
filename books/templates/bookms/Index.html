@@ -1,0 +1,83 @@
+{% extends 'bookms/base.html' %}
+
+{% block home_nav %}
+    {% if is_login %}
+        <a class="navbar-brand" href="{% url 'home' user.id %}"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Home</a>
+    {% else %}
+        <a class="navbar-brand" href="{% url 'index' %}"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Home</a>
+    {% endif %}
+{% endblock %}
+
+{% block register %}
+    {% if is_login %}
+    {% else %}
+        <li><a href="{% url 'sign_up' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;注册</a></li>
+        <li><a href="/admin"><span class="glyphicon glyphicon-book">&nbsp;管理员</span></a></li>
+    {% endif %}
+{% endblock %}
+{% block login_or_out %}
+    {% if is_login %}
+        <li><a href="{% url 'sign_out' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;退出</a></li>
+    {% else %}
+        <li><a href="{% url 'sign_in' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;登陆</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <br><br>
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-8 column">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">新书入库</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            {% if new_books %}
+                                <th>书名<span class="label label-info">评分</span></th><th>作者</th><th>出版社</th>
+                                {% for book in new_books %}
+                                    <tr><td>
+                                            <a href="{% url 'book_info' book.isbn %}">《{{ book.name }}》</a>
+                                            {% if book.rate %}
+                                                <span class="label label-info">{{ book.rate }}</span>
+                                            {% else %}
+                                                <span class="label label-default">无</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ book.author.name }}</td>
+                                        <td>{{ book.publisher.name }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                无
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 column">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">过期未还名单</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            {% if overdue_rec %}
+                                <th>用户</th><th>书名</th>
+                                {% for rec in overdue_rec %}
+                                    <tr>
+                                        <td>{{ rec.reader.user.username }}</td>
+                                        <td>{{ rec.book.name }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                无
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

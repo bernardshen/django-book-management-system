@@ -1,0 +1,24 @@
+{% extends 'bookms/base.html' %}
+
+{% block home_nav %}
+    {% if is_login %}
+        <a class="navbar-brand" href="{% url 'home' user.id %}"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Home</a>
+    {% else %}
+        <a class="navbar-brand" href="{% url 'index' %}"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Home</a>
+    {% endif %}
+{% endblock %}
+
+{% if is_login %}
+    {% block register %}
+    {% endblock %}
+    {% block login_or_out %}
+        <li><a href="{% url 'sign_out' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;退出</a></li>
+    {% endblock %}
+{% endif %}
+
+
+{% block body %}
+    <div class="row alert">
+        无权访问！
+    </div>
+{% endblock %}

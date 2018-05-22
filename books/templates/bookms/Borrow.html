@@ -1,0 +1,24 @@
+{% extends 'bookms/base.html' %}
+{% block body %}
+    <br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-0">
+                <table class="table table-striped">
+                    <tr><th>书名</th><td>《{{ book.name }}》</td></tr>
+                    <tr><th>作者</th><td>{{ book.author.name }}</td></tr>
+                    <tr><th>出版社</th><td>{{ book.publisher.name }}</td></tr>
+                    <tr><th>入库日期</th><td>{{ book.inc_date }}</td></tr>
+                    <tr><th>在库本书</th><td>{{book.num_copies }}</td></tr>
+                    <tr><th>借出本数</th><td>{{ book.num_lend }}</td></tr>
+                </table>
+                <br>
+                <form action="{% url 'borrow' book.isbn %}" method="post">
+                    <p>
+                        <input type="submit" class="btn btn-default btn-lg btn-block" value="确认借阅">
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

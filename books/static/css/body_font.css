@@ -1,0 +1,20 @@
+.body_title_font{
+    font-family: "Arial","Microsoft Himalaya","黑体","宋体",sans-serif;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    font-size: 24px;
+}
+
+.body_content_font {
+    font-family: "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Hiragino Sans GB W3", "WenQuanYi Micro Hei", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+    font-size: 15px;
+}
+
+.panel-content{
+    padding-top: 3px;
+}
+
+table{
+    font-size: 14px;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Hiragino Sans GB W3", "WenQuanYi Micro Hei", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+}

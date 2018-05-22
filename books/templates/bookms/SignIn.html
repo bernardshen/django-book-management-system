@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Sign in</title>
+
+    {% load static %}
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/css/SignIn.css" rel="stylesheet">
+    <link href="../../static/css/Index.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+
+      <center><form action="{% url 'sign_in' %}" class="form-signin" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+          <h2 class="form-signin-heading">请登陆</h2>
+          <label for="输入用户名" class="sr-only">用户名</label>
+          <input type="text" class="form-control" name="username" id="id_username" placeholder="输入用户名" required autofocus>
+          {% if state == 'user_name_not_exist' %}
+              <div class="form-signin-heading">
+                  <p><font color="#dc143c">{{ message }}</font></p>
+              </div>
+          {% endif %}
+          <label for="输入密码" class="sr-only">密码</label>
+          <input type="password" class="form-control" name="password" id="password" placeholder="输入密码" required>
+          {% if state == 'password_error' %}
+              <div class="form-signin-heading">
+                  <p><font color="#dc143c">{{ message }}</font></p>
+              </div>
+          {% endif %}
+          <button class="btn btn-lg btn-primary btn-block" type="submit">立即登陆</button>
+
+  </form></center>
+
+  </div>
+{% if sign_up_success %}
+    <p>注册成功！</p>
+{% endif %}
+  <div class="container">
+      <div class="index-template">
+          <p><a href="{% url 'index' %}">Click here</a> to return index</p>
+      </div>
+  </div>
+</body>
+</html>

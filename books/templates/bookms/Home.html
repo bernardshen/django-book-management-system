@@ -1,0 +1,140 @@
+{% extends 'bookms/base.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/body_font.css' %}">
+
+{% block login_or_out %}
+    <li><a href="{% url 'sign_out' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;退出</a></li>
+{% endblock %}
+
+{% block register %}
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <br><br>
+            <div class="body_title_font">
+
+                你好，{{ user.username }}
+                {% if forbid %}
+                    <span class="label label-warning">限制借书</span>
+                {% endif %}
+            </div>
+        </div>
+        <br><br>
+        <div class="row clearfix">
+            <div class="col-md-6 column">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">新书入库</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            {% if new_books %}
+                                <th>书名<span class="label label-info">评分</span></th><th>作者</th><th>出版社</th><th>操作</th>
+                                {% for book_new in new_books %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'book_info' book_new.isbn %}">《{{ book_new.name }}》</a>
+                                            {% if book_new.rate %}
+                                                <span class="label label-info">{{ book_new.rate }}</span>
+                                            {% else %}
+                                                <span class="label label-default">无评分</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ book_new.author.name }}</td>
+                                        <td>{{ book_new.publisher.name }}</td>
+                                        <td><a href="{% url 'borrow' book_new.isbn %}">借书</a></td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                无
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 column">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">你可能喜欢</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            {% if likely_like_list %}
+                                <th>书名<span class="label label-info">评分</span></th><th>作者</th><th>出版社</th><th>操作</th>
+                                {% for likely_book in likely_like_list %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'book_info' likely_book.isbn %}">《{{ likely_book.name }}》</a>
+                                            {% if likely_book.rate %}
+                                                <span class="label label-info">{{ likely_book.rate }}</span>
+                                            {% else %}
+                                                <span class="label label-default">无评分</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ likely_book.author.name }}</td>
+                                        <td>{{ likely_book.publisher.name }}</td>
+                                        <td><a href="{% url 'borrow' likely_book.isbn %}">借书</a></td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                无
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br><br>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="panel-title">
+                    借阅图书
+                </span>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    {% if book_list %}
+                        <th>书名</th><th>借书日期</th><th>操作</th><th></th>
+                        {% for book in book_list %}
+                            {% if book.is_overdue %}
+                                <tr class="danger"><td>《{{ book.book.name }}》<span class="label label-danger">过期</span></td><td>{{ book.date }}</td><td><a href="{% url 'return_book' book.book.isbn %}">还书</a></td><td><a href="{% url 'renewal' book.book.isbn %}">续借</a></td></tr>
+                            {% elif book.nearly_overdue %}
+                                <tr class="warning"><td>《{{ book.book.name }}》<span class="label label-warning">即将过期</span></td><td>{{ book.date }}</td><td><a href="{% url 'return_book' book.book.isbn %}">还书</a></td><td><a href="{% url 'renewal' book.book.isbn %}">续借</a></td></tr>
+                            {% else %}
+                                <tr><td>《{{ book.book.name }}》<span class="label label-success">正常</span></td><td>{{ book.date }}</td><td><a href="{% url 'return_book' book.book.isbn %}">还书</a></td><td><a href="{% url 'renewal' book.book.isbn %}">续借</a></td></tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        无
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="panel-title">借阅历史</span>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        {% if book_list_hist %}
+                            <th>书名</th><th>借书日期</th><th>归还日期</th>
+                            {% for book1 in book_list_hist %}
+                                <tr>
+                                    <td><a href="{% url 'book_info' book1.book.isbn %}">《{{ book1.book.name }}》</a></td>
+                                    <td>{{ book1.borrow_date }}</td>
+                                    <td>{{ book1.return_date }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            无
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

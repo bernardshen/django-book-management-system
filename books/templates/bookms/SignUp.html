@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <title>Sign up</title>
+
+    {% load static %}
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/css/SignIn.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    {% if userExist %}
+      <div class="form-signin-heading">
+          <p><font color="#dc143c">你已经注册过了！</font></p>
+          <p><a href="{% url 'sign_in' %}">单击此处</a>登陆</p>
+      </div>
+    {% else %}
+      <form action="{% url 'sign_up' %}" class="form-signin" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+        <h4 class="form-signin-heading">用户名：</h4>
+        <label for="input_username" class="sr-only">用户名</label>
+        <input type="text" name="username" class="form-control" id="username" placeholder="输入用户名">
+        {% if usernameExist %}
+            <div class="form-signin-heading">
+              <p><font color="#dc143c">{{ registered_username }}已被注册</font></p>
+            </div>
+        {% elif invalid_username %}
+            <div class="form-signin-heading">
+              <p><font color="#dc143c">用户名不合法！</font></p>
+            </div>
+        {% endif %}
+        <h4 class="form-signin-heading">密码：</h4>
+        <label for="input_password" class="sr-only">密码：</label>
+        <input type="password" name="password" class="form-control" id="password" placeholder="请输入密码">
+        <h4 class="form-signin-heading">确认密码：</h4>
+        <label for="input_password_re" class="sr-only">确认密码</label>
+        <input type="password" name="password_re" class="form-control" id="password_re" placeholder="确认你的密码">
+        {% if invalid_password %}
+            <div class="form-signin-heading">
+              <p><font color="#dc143c">密码不合法！</font></p>
+            </div>
+        {% elif match_error %}
+            <div class="form-signin-heading">
+              <p><font color="#dc143c">密码不匹配！</font></p>
+            </div>
+        {% endif %}
+        <h4 class="form-signin-heading">年龄（选填）：</h4>
+        <label for="input_age" class="sr-only">年龄：</label>
+        <input type="number" name="age" class="form-control" id="age" placeholder="选填" value="0"><br>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
+      </form>
+      <div class="container">
+        <div class="index-template" align="center">
+          <p><a href="{% url 'index' %}">Click here</a> to return index</p>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+
+</body>
+</html>

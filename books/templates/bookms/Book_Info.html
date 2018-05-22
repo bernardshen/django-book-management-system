@@ -1,0 +1,117 @@
+{% extends 'bookms/base.html' %}
+
+{% block home_nav %}
+    {% if is_login %}
+        <a class="navbar-brand" href="{% url 'home' user.id %}"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Home</a>
+    {% else %}
+        <a class="navbar-brand" href="{% url 'index' %}"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Home</a>
+    {% endif %}
+{% endblock %}
+
+{% block register %}
+    {% if is_login %}
+    {% else %}
+        <li><a href="{% url 'sign_up' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;注册</a></li>
+        <li><a href="/admin"><span class="glyphicon glyphicon-book">&nbsp;管理员</span></a></li>
+    {% endif %}
+{% endblock %}
+{% block login_or_out %}
+    {% if is_login %}
+        <li><a href="{% url 'sign_out' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;退出</a></li>
+    {% else %}
+        <li><a href="{% url 'sign_in' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;登陆</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-0">
+                <table class="table table-striped">
+                    <tr><th>书名</th><td>《{{ book.name }}》</td></tr>
+                    <tr><th>作者</th><td>{{ book.author.name }}</td></tr>
+                    <tr><th>出版社</th><td>{{ book.publisher.name }}</td></tr>
+                    <tr><th>入库日期</th><td>{{ book.inc_date }}</td></tr>
+                    <tr><th>在库本书</th><td>{{book.num_copies }}</td></tr>
+                    <tr><th>借出本数</th><td>{{ book.num_lend }}</td></tr>
+                </table>
+                <br>
+                <p class="list-grout-item">
+                    <a href="{% url 'borrow' book.isbn %}" style="text-decoration: none;"><button class="btn btn-default btn-lg btn-block">借书</button></a>
+                </p>
+            </div>
+        </div>
+        <br><br>
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title">可能想借</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped">
+                    {% if likely_books %}
+                        <thead>
+                            <tr>
+                                <th>书名<span class="label label-info">评分</span></th>
+                                <th>作者</th>
+                                <th>出版社</th>
+                                <th>在库副本</th>
+                                <th>借出数</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for likely_book in likely_books %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'book_info' likely_book.isbn %}">《{{ likely_book.name }}》</a>
+                                        {% if likely_book.rate %}
+                                            <span class="label label-info">{{ likely_book.rate }}</span>
+                                        {% else %}
+                                            <span class="label label-default">无评论</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ likely_book.author.name }}</td>
+                                    <td>{{ likely_book.publisher.name }}</td>
+                                    <td>{{ likely_book.num_copies }}</td>
+                                    <td>{{ likely_book.num_lend }}</td>
+                                    <td><a href="{% url 'borrow' likely_book.isbn %}">借书</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    {% else %}
+                        没有相似书籍
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">用户评论</h3>
+            </div>
+            <div class="panel-body">
+                {% if comments %}
+                    {% for comment in comments %}
+                        <div class="panel panel-success">
+                            <div class="panel panel-title">
+                                <h3 class="panel-title">
+                                    {{ comment.reader.user.username }}
+                                    <span class="label label-info">{{ comment.rate }}分</span>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                {% if comment.comment %}
+                                    {{ comment.comment }}
+                                {% else %}
+                                    无评论
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    暂无评论
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
