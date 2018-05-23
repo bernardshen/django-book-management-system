@@ -19,18 +19,20 @@
 ## 部署运行
 ### 链接数据库
 1. 打开`books/books/settings.py`
-2. 修改```
-		DATABASES = {
-    		'default': {
-        		'ENGINE': 'django.db.backends.mysql',
-        		'NAME': 'your_database_name',
-        		'HOST': 'your_host',
-        		'PORT': 'your_host',
-        		'USER': 'your_username',
-        		'PASSWORD': 'your_password'
-    		}
-		}```
-	把其中your_*的内容改为你数据库的信息
+2. 修改
+	```
+	DATABASES = {
+		'default': {
+      			'ENGINE': 'django.db.backends.mysql',
+       			'NAME': 'your_database_name',
+       			'HOST': 'your_host',
+       			'PORT': 'your_host',
+       			'USER': 'your_username',
+       			'PASSWORD': 'your_password'
+  		}
+	}
+	```
+	*把其中`your_*`的内容改为你数据库的信息*
 3. 终端路径到`books/`
 4. 终端输入`python manage.py makemigrations`
 5. 终端输入`python manage.py migrate`
